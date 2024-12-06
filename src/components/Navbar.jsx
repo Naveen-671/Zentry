@@ -6,10 +6,10 @@ import { TiLocationArrow } from "react-icons/ti";
 
 import Button from "./Button";
 
-const navItems = ["Nexus", "Vault", "Prologue", "About", "Contact"];
+const navItems = ['Nexus', 'Vault','Prologue','About','Contact']
 
-const NavBar = () => {
-  // State for toggling audio and visual indicator
+const Navbar = () => {
+      // State for toggling audio and visual indicator
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
 
@@ -17,25 +17,9 @@ const NavBar = () => {
   const audioElementRef = useRef(null);
   const navContainerRef = useRef(null);
 
-  const { y: currentScrollY } = useWindowScroll();
-  const [isNavVisible, setIsNavVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  // Toggle audio and visual indicator
-  const toggleAudioIndicator = () => {
-    setIsAudioPlaying((prev) => !prev);
-    setIsIndicatorActive((prev) => !prev);
-  };
-
-  // Manage audio playback
-  useEffect(() => {
-    if (isAudioPlaying) {
-      audioElementRef.current.play();
-    } else {
-      audioElementRef.current.pause();
-    }
-  }, [isAudioPlaying]);
-
+  const [lastScrollY,setLastScrollY] = useState(0)
+  const [isNavVisible,setIsNavVisible] = useState(true)
+  const {y:currentScrollY} = useWindowScroll();
   useEffect(() => {
     if (currentScrollY === 0) {
       // Topmost position: show navbar without floating-nav
@@ -54,13 +38,27 @@ const NavBar = () => {
     setLastScrollY(currentScrollY);
   }, [currentScrollY, lastScrollY]);
 
+  useEffect(()=>{
+    gsap.to(navContainerRef.current,{
+      y:isNavVisible ? 0 : -100,
+      opacity:isNavVisible ? 1 :0,
+      duration:0.2,
+    })
+  },[isNavVisible])
+
+    // Toggle audio and visual indicator
+  const toggleAudioIndicator = () => {
+    setIsAudioPlaying((prev) => !prev);
+    setIsIndicatorActive((prev) => !prev);
+  };
+     // Manage audio playback
   useEffect(() => {
-    gsap.to(navContainerRef.current, {
-      y: isNavVisible ? 0 : -100,
-      opacity: isNavVisible ? 1 : 0,
-      duration: 0.2,
-    });
-  }, [isNavVisible]);
+    if (isAudioPlaying) {
+      audioElementRef.current.play();
+    } else {
+      audioElementRef.current.pause();
+    }
+  }, [isAudioPlaying]);
 
   return (
     <div
@@ -71,17 +69,24 @@ const NavBar = () => {
         <nav className="flex size-full items-center justify-between p-4">
           {/* Logo and Product button */}
           <div className="flex items-center gap-7">
-            <img src="/img/logo.png" alt="logo" className="w-10" />
-
+            {/* <img src="/img/logo.png" alt="logo" className="w-10" /> */}
+            {/* <img src="public\img\idSz9eedIc_logos.jpeg" alt="logo" className="w-10" /> */}
+            <img src="public\img\zentry-logo-white-on-black.svg" alt="logo" className="w-14" />
             <Button
               id="product-button"
               title="Products"
               rightIcon={<TiLocationArrow />}
               containerClass="bg-blue-50 md:flex hidden items-center justify-center gap-1"
             />
+            <Button
+              id="WhitePapers"
+              title="WhitePapers"
+              rightIcon={<TiLocationArrow />}
+              containerClass="bg-blue-50 md:flex hidden items-center justify-center gap-1"
+            />
           </div>
 
-          {/* Navigation Links and Audio Button */}
+              {/* Navigation Links and Audio Button */}
           <div className="flex h-full items-center">
             <div className="hidden md:block">
               {navItems.map((item, index) => (
@@ -95,16 +100,15 @@ const NavBar = () => {
               ))}
             </div>
 
-            <button
-              onClick={toggleAudioIndicator}
-              className="ml-10 flex items-center space-x-0.5"
-            >
-              <audio
+            <button onClick={toggleAudioIndicator} className="ml-10 flex items-center space-x-0.5 ">
+            <audio
                 ref={audioElementRef}
                 className="hidden"
+                onClick={toggleAudioIndicator}
                 src="/audio/loop.mp3"
                 loop
               />
+
               {[1, 2, 3, 4].map((bar) => (
                 <div
                   key={bar}
@@ -117,11 +121,11 @@ const NavBar = () => {
                 />
               ))}
             </button>
-          </div>
+            </div>
         </nav>
-      </header>
+        </header>
     </div>
-  );
-};
+  )
+}
 
-export default NavBar;
+export default Navbar

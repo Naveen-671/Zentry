@@ -22,7 +22,7 @@ const Hero = () => {
   const handleVideoLoad = () => {
     setLoadedVideos((prev) => prev + 1);
   };
-
+  // to check that all videos have been loaded
   useEffect(() => {
     if (loadedVideos === totalVideos - 1) {
       setLoading(false);
@@ -35,34 +35,35 @@ const Hero = () => {
     setCurrentIndex((prevIndex) => (prevIndex % totalVideos) + 1);
   };
 
-  useGSAP(
-    () => {
-      if (hasClicked) {
-        gsap.set("#next-video", { visibility: "visible" });
-        gsap.to("#next-video", {
-          transformOrigin: "center center",
-          scale: 1,
-          width: "100%",
-          height: "100%",
-          duration: 1,
-          ease: "power1.inOut",
-          onStart: () => nextVdRef.current.play(),
-        });
-        gsap.from("#current-video", {
-          transformOrigin: "center center",
-          scale: 0,
-          duration: 1.5,
-          ease: "power1.inOut",
-        });
-      }
-    },
-    {
-      dependencies: [currentIndex],
-      revertOnUpdate: true,
-    }
-  );
+  useGSAP(()=>{
+    if(hasClicked){
+      gsap.set('#next-video',{visibility:'visible'});
 
-  useGSAP(() => {
+      gsap.to('#next-video',{
+        transformOrigin:'center center',
+        scale:1,
+        width:'100%',
+        height:'100%',
+        duration:1,
+        ease:'power1.inOut',
+        onStart:() => nextVdRef.current.play(),
+      })
+
+      gsap.from('#current-video',{
+        transformOrigin:'center center',
+        scale:0,
+        duration:1.5,
+        ease:'power1.inOut',
+      });
+    }
+  },
+  {
+    dependencies: [currentIndex],
+    revertOnUpdate: true,
+  }
+);
+
+  useGSAP(()=>{
     gsap.set("#video-frame", {
       clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
       borderRadius: "0% 0% 40% 10%",
@@ -84,6 +85,8 @@ const Hero = () => {
 
   return (
     <div className="relative h-dvh w-screen overflow-x-hidden">
+
+      {/* loading effect three dot spinning */}
       {loading && (
         <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
           {/* https://uiverse.io/G4b413l/tidy-walrus-92 */}
@@ -118,7 +121,7 @@ const Hero = () => {
               </div>
             </VideoPreview>
           </div>
-
+          {/* zoon in effect */}
           <video
             ref={nextVdRef}
             src={getVideoSrc(currentIndex)}
@@ -140,20 +143,18 @@ const Hero = () => {
           />
         </div>
 
-        <h1 className="special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75">
-          G<b>A</b>MING
-        </h1>
+        <h1 className="special-font hero-heading absolute bottom-5 right-5 z-10 text-blue-75">
+              G<b>a</b>ming
+            </h1>
 
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 px-5 sm:px-10">
-            <h1 className="special-font hero-heading text-blue-100">
-              redefi<b>n</b>e
-            </h1>
+           <h1 className="special-font hero-heading text-blue-100">redefi<b>n</b>e</h1>
 
             <p className="mb-5 max-w-64 font-robert-regular text-blue-100">
               Enter the Metagame Layer <br /> Unleash the Play Economy
             </p>
-
+            
             <Button
               id="watch-trailer"
               title="Watch trailer"
@@ -164,6 +165,7 @@ const Hero = () => {
         </div>
       </div>
 
+      
       <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
         G<b>A</b>MING
       </h1>
